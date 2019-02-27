@@ -15,17 +15,20 @@ public class MazeSolver{
           col=line.length();
           row++;
       }
+      Scanner input = new Scanner(text);
       String[][] pic=new String[row][col];
-      while(inf.hasNextLine()){
-        String line = inf.nextLine();
+      String s="";
+      while(input.hasNextLine()){
+        String line = input.nextLine();
         int x=0;
         for (int y=0;y<col;y++) {
-          System.out.println(line);
           pic[x][y]=line.substring(y,y+1);
-          System.out.println(pic[x][y]);
+          s+=pic[x][y];
         }
+        s+="\n";
         x++;
       }
+      System.out.println(s);
   }
   catch(FileNotFoundException e){
     System.out.println("File not found");
