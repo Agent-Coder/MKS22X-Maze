@@ -39,7 +39,7 @@ public class Maze{
               row++;
           }
           Scanner input = new Scanner(text);
-          maze=new Char[row][col];
+          maze=new char[row][col];
           String s="";
           while(input.hasNextLine()){
             String line = input.nextLine();
@@ -52,7 +52,6 @@ public class Maze{
             x++;
           }
       }
-    }
 
 
     private void wait(int millis){
@@ -88,13 +87,18 @@ public class Maze{
 
     */
     public int solve(){
+      int a=0;
+      int b=0;
       for (int i=0;i<maze.length;i++) {
         for (int j=0;j<maze.length;j++){
-          if(maze[i][j]='S'){
+          if(maze[i][j]=='S'){
             maze[i][j]='@';
+            a=i;
+            b=j;
           }
         }
       }
+      return solve(a,b,0);
             //find the location of the S.
 
 
@@ -124,7 +128,7 @@ public class Maze{
 
         All visited spots that are part of the solution are changed to '@'
     */
-    private int solve(int row, int col){ //you can add more parameters since this is private
+    private int solve(int row, int col,int direction){ //you can add more parameters since this is private
 
 
         //automatic animation! You are welcome.
@@ -135,10 +139,47 @@ public class Maze{
 
             wait(20);
         }
+        if(maze[row][col]!='@'||maze[row][col]!='.'||maze[row][col]!='#'){
+          maze[row][col]='@';
+          if(direction==1){
+            return solve(row,col+1,direction);
+          }
+            else if(direction==3){
+            return solve(row,col-1,direction);
+          }
+          else if(direction==2){
+            return solve(row+1,col,direction);
+          }
+          else{
+            System.out.println(row+" "+col);
+            return solve(row-1,col,direction);
+         }
+        }
+        else if(maze[row][col]!='E'){
+          return -1; //so it compiles
+        }
+        else{
+          if (maze[row][col]!='#'){
+            maze[row][col]='.';
+          }
+
+          if(direction==1){
+            return solve(row,col-1,direction+1);
+          }
+          else if(direction==3){
+            return solve(row,col+1,direction+1);
+            }
+          else if(direction==2){
+            return solve(row-1,col,direction+1);
+          }
+          else{
+            return solve(row+1,col,1);
+          }
+        }
 
         //COMPLETE SOLVE
 
-        return -1; //so it compiles
+
     }
 
 
