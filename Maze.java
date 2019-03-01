@@ -41,19 +41,28 @@ public class Maze{
           Scanner input = new Scanner(text);
           maze=new char[row][col];
           String s="";
+          int x=0;
           while(input.hasNextLine()){
             String line = input.nextLine();
-            int x=0;
             for (int y=0;y<col;y++) {
               maze[x][y]=line.charAt(y);
               s+=maze[x][y];
             }
-            s+="\n";
             x++;
+            s+="\n";
           }
       }
 
-
+    public String toString(){
+      String s="";
+      for (int i=0;i<maze.length;i++) {
+        s+="\n";
+        for (int j=0;j<maze[0].length;j++){
+          s+=maze[i][j];
+        }
+      }
+      return s;
+    }
     private void wait(int millis){
          try {
              Thread.sleep(millis);
@@ -87,18 +96,21 @@ public class Maze{
 
     */
     public int solve(){
-      int a=0;
-      int b=0;
-      for (int i=0;i<maze.length;i++) {
-        for (int j=0;j<maze.length;j++){
+      int a=1;
+      int b=1;
+      for (int i=1;i<maze.length;i++) {
+        for (int j=1;j<maze[0].length;j++){
           if(maze[i][j]=='S'){
             maze[i][j]='@';
             a=i;
             b=j;
+            i=maze.length;
+            j=maze.length;
           }
         }
       }
-      return solve(a,b,0);
+      System.out.println(a+" ,"+b);
+      return solve(a,b,1,0);
             //find the location of the S.
 
 
@@ -128,9 +140,9 @@ public class Maze{
 
         All visited spots that are part of the solution are changed to '@'
     */
-    private int solve(int row, int col,int direction){ //you can add more parameters since this is private
+    private int solve(int row, int col,int direction,int steps){ //you can add more parameters since this is private
 
-
+        System.out.println(row+" "+col);
         //automatic animation! You are welcome.
         if(animate){
 
@@ -142,21 +154,21 @@ public class Maze{
         if(maze[row][col]!='@'||maze[row][col]!='.'||maze[row][col]!='#'){
           maze[row][col]='@';
           if(direction==1){
-            return solve(row,col+1,direction);
+            return solve(row,col+1,direction,steps+1);
           }
             else if(direction==3){
-            return solve(row,col-1,direction);
+            return solve(row,col-1,direction,steps+1);
           }
           else if(direction==2){
-            return solve(row+1,col,direction);
+            return solve(row+1,col,direction,steps+1);
           }
           else{
-            System.out.println(row+" "+col);
-            return solve(row-1,col,direction);
+            //System.out.println(row+" "+col);
+            return solve(row-1,col,direction,steps+1);
          }
         }
         else if(maze[row][col]!='E'){
-          return -1; //so it compiles
+          return steps; //so it compiles
         }
         else{
           if (maze[row][col]!='#'){
@@ -164,16 +176,16 @@ public class Maze{
           }
 
           if(direction==1){
-            return solve(row,col-1,direction+1);
+            return solve(row,col-1,direction+1,steps);
           }
           else if(direction==3){
-            return solve(row,col+1,direction+1);
+            return solve(row,col+1,direction+1,steps);
             }
           else if(direction==2){
-            return solve(row-1,col,direction+1);
+            return solve(row-1,col,direction+1,steps);
           }
           else{
-            return solve(row+1,col,1);
+            return solve(row+1,col,direction+1,steps);
           }
         }
 
