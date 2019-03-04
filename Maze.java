@@ -27,7 +27,7 @@ public class Maze{
 
     public Maze(String filename) throws FileNotFoundException{
         //COMPLETE CONSTRUCTOR
-          animate=false;
+          setAnimate(false);
           File text = new File("Maze.txt");
           Scanner inf = new Scanner(text);
           int row=0;
@@ -110,7 +110,6 @@ public class Maze{
           }
         }
       }
-      //System.out.println(a+" ,"+b);
       int[] offsets=new int[8];
       offsets[0]=0;
       offsets[1]=1;
@@ -159,66 +158,29 @@ public class Maze{
             wait(40);
         }
         if(maze[row][col]=='E'){
-          //System.out.println("Yes");
+
           setAnimate(false);
-          return 0; //so it compiles
+          return steps; //so it compiles
         }
         else if(maze[row][col]!='@'&maze[row][col]!='.'&&maze[row][col]!='#'){
+
           maze[row][col]='@';
-          for (int i=0; i<4;i++ ) {
+          steps+=1;
+          for (int i=0; i<4;i++) {
             int x=solve(row+moves[i*2],col+moves[i*2+1],moves);
             if (x!=-1){
-
               return steps+x;
             }
           }
           maze[row][col]='.';
+          steps+=-1;
           return -1;
         }
 
         else{
-          //System.out.println("Yes");
+
           return -1;
         }
-          /*if(maze[row][col]=='#'){
-            System.out.println("Failed at#:"+row+","+col);
-            System.out.println("Going to try:"+(row+moves[d*2]) +","+(col+moves[d*2+1]));
-            return solve(row+moves[d*2],col+moves[d*2+1],direction+1,steps+1,changed+1,moves);
-          }*/
-          /*if(maze[row][col]=='.'){
-            return solve(row+moves[d*2],col+moves[d*2+1],direction,steps+1,changed,moves);
-          }*/
-          /*if(changed>=4){
-            System.out.println("made dot at"+(row-moves[d*2])+","+(col-moves[d*2+1]));
-            maze[row-moves[d*2]][col-moves[d*2+1]]='.';
-            System.out.println("Going to try"+(row-moves[d*2])+","+(col-moves[d*2+1]));
-            System.out.println(this);
-            if(maze[row-moves[d*2]][col-moves[d*2+1]]=='@'){
-              System.out.println("yess");
-              return solve(row-moves[d*2]+moves[((direction+1)%4)*2],col-moves[d*2+1]+moves[((direction+1)%4)*2+1],direction,steps+1,0,moves);
-            }
-            else if(maze[row-moves[0]][col-moves[1]]=='@'){
-              return solve(row-moves[0]+moves[2],col-moves[1]+moves[3],1,steps+1,2,moves);
-            }
-            else if(maze[row-moves[2]][col-moves[3]]=='@'){
-              return solve(row-moves[2]+moves[4],col-moves[3]+moves[5],2,steps+1,2,moves);
-            }
-            else if(maze[row-moves[4]][col-moves[5]]=='@'){
-              return solve(row-moves[4]+moves[6],col-moves[5]+moves[7],3,steps+1,2,moves);
-            }
-            else {
-              return solve(row-moves[6]+moves[0],col-moves[7]+moves[1],0,steps+1,2,moves);
-            }
-          }
-
-            //System.out.println("row"+row+"col"+(col-1));
-            //System.out.println("so");
-            //System.out.println("to be "+(row-moves[d*2])+","+col-moves[d*2+1]);
-            System.out.println("Failed at:"+row+","+col);
-            System.out.println("Going to try:"+(row-moves[(direction%4)*2]+moves[((direction+1)%4)*2])+","+(col-moves[(direction%4)*2+1]+moves[((direction+1)%4)*2+1]));
-            System.out.println("changes:"+changed);
-            System.out.println(this);
-            return solve(row-moves[d*2]+moves[((direction+1)%4)*2],col-moves[d*2+1]+moves[((direction+1)%4)*2+1],direction+1,steps+1,changed+1,moves);*/
         }
 
         //COMPLETE SOLVE
