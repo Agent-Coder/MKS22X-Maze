@@ -106,7 +106,7 @@ public class Maze{
             a=i;
             b=j;
             i=maze.length;
-            j=maze.length;
+            j=maze[0].length;
           }
         }
       }
@@ -120,7 +120,7 @@ public class Maze{
       offsets[5]=-1;
       offsets[6]=-1;
       offsets[7]=0;
-      return solve(a,b,0,0,0,offsets);
+      return solve(a,b,offsets);
             //find the location of the S.
 
 
@@ -150,68 +150,80 @@ public class Maze{
 
         All visited spots that are part of the solution are changed to '@'
     */
-    private int solve(int row, int col,int direction,int steps,int changed,int[] moves){ //you can add more parameters since this is private
-      System.out.println("\n");
-        System.out.println("direction: "+direction);
-        System.out.println(this);
-        System.out.println(row+" "+col);
+    private int solve(int row, int col,int[] moves){ //you can add more parameters since this is private
+      int steps=0;
         //automatic animation! You are welcome.
         if(animate){
-
             clearTerminal();
             System.out.println(this);
-
-            wait(20);
+            wait(40);
         }
-        if(changed>20){
-          return steps;
+        if(maze[row][col]=='E'){
+          //System.out.println("Yes");
+          setAnimate(false);
+          return 0; //so it compiles
         }
-        //System.out.println("1");
-        if(maze[row][col]!='@'&&maze[row][col]!='.'&&maze[row][col]!='#'){
-          changed=0;
-          System.out.println("2");
+        else if(maze[row][col]!='@'&maze[row][col]!='.'&&maze[row][col]!='#'){
           maze[row][col]='@';
-          if(direction==0){
-            return solve(row+moves[direction*2],col+moves[direction*2+1],direction,steps+1,changed,moves);
-          }
-            else if(direction==2){
-            return solve(row+moves[direction*2],col+moves[direction*2+1],direction,steps+1,changed,moves);
-          }
-          else if(direction==1){
-            return solve(row+moves[direction*2],col+moves[direction*2+1],direction,steps+1,changed,moves);
-          }
-          else{
+          for (int i=0; i<4;i++ ) {
+            int x=solve(row+moves[i*2],col+moves[i*2+1],moves);
+            if (x!=-1){
 
-            //System.out.println(row+" "+col);
-            return solve(row+moves[direction*2],col+moves[direction*2+1],direction,steps+1,changed,moves);
-         }
+              return steps+x;
+            }
+          }
+          maze[row][col]='.';
+          return -1;
         }
-        else if(maze[row][col]=='E'){
-          System.out.println("3");
-          return steps; //so it compiles
-        }
+
         else{
-          System.out.println("4");
-          if (maze[row][col]!='#'&&changed==4){
-            maze[row][col]='.';
+          //System.out.println("Yes");
+          return -1;
+        }
+          /*if(maze[row][col]=='#'){
+            System.out.println("Failed at#:"+row+","+col);
+            System.out.println("Going to try:"+(row+moves[d*2]) +","+(col+moves[d*2+1]));
+            return solve(row+moves[d*2],col+moves[d*2+1],direction+1,steps+1,changed+1,moves);
+          }*/
+          /*if(maze[row][col]=='.'){
+            return solve(row+moves[d*2],col+moves[d*2+1],direction,steps+1,changed,moves);
+          }*/
+          /*if(changed>=4){
+            System.out.println("made dot at"+(row-moves[d*2])+","+(col-moves[d*2+1]));
+            maze[row-moves[d*2]][col-moves[d*2+1]]='.';
+            System.out.println("Going to try"+(row-moves[d*2])+","+(col-moves[d*2+1]));
+            System.out.println(this);
+            if(maze[row-moves[d*2]][col-moves[d*2+1]]=='@'){
+              System.out.println("yess");
+              return solve(row-moves[d*2]+moves[((direction+1)%4)*2],col-moves[d*2+1]+moves[((direction+1)%4)*2+1],direction,steps+1,0,moves);
+            }
+            else if(maze[row-moves[0]][col-moves[1]]=='@'){
+              return solve(row-moves[0]+moves[2],col-moves[1]+moves[3],1,steps+1,2,moves);
+            }
+            else if(maze[row-moves[2]][col-moves[3]]=='@'){
+              return solve(row-moves[2]+moves[4],col-moves[3]+moves[5],2,steps+1,2,moves);
+            }
+            else if(maze[row-moves[4]][col-moves[5]]=='@'){
+              return solve(row-moves[4]+moves[6],col-moves[5]+moves[7],3,steps+1,2,moves);
+            }
+            else {
+              return solve(row-moves[6]+moves[0],col-moves[7]+moves[1],0,steps+1,2,moves);
+            }
           }
 
-          if(direction!=3){
             //System.out.println("row"+row+"col"+(col-1));
-            System.out.println("so");
-            return solve(row-moves[direction*2]+moves[(direction+1)*2],col-moves[direction*2+1]+moves[(direction+1)*2+1],direction+1,steps,changed+1,moves);
-          }
-          else{
-            //System.out.println("row"+(row+1+"col"+col));
-            //System.out.println("no");
-            return solve(row-moves[direction*2]+moves[0],col-moves[direction*2+1]+moves[1],0,steps,changed+1,moves);
-          }
+            //System.out.println("so");
+            //System.out.println("to be "+(row-moves[d*2])+","+col-moves[d*2+1]);
+            System.out.println("Failed at:"+row+","+col);
+            System.out.println("Going to try:"+(row-moves[(direction%4)*2]+moves[((direction+1)%4)*2])+","+(col-moves[(direction%4)*2+1]+moves[((direction+1)%4)*2+1]));
+            System.out.println("changes:"+changed);
+            System.out.println(this);
+            return solve(row-moves[d*2]+moves[((direction+1)%4)*2],col-moves[d*2+1]+moves[((direction+1)%4)*2+1],direction+1,steps+1,changed+1,moves);*/
         }
 
         //COMPLETE SOLVE
 
 
-    }
 
 
 }
