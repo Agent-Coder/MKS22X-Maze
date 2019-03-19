@@ -28,7 +28,7 @@ public class Maze{
     public Maze(String filename) throws FileNotFoundException{
         //COMPLETE CONSTRUCTOR
           setAnimate(false);
-          File text = new File("Maze.txt");
+          File text = new File(filename);
           Scanner inf = new Scanner(text);
           int row=0;
           int col=0;
